@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./src/public/css/bootstrap.min (3).css">
+    <link rel="stylesheet" href="./src/public/css/min.css">
+    <link rel="stylesheet" href="./src/public/css/header.css">
+    <link rel="stylesheet" href="./src/public/fonts/css/anychart-font.css">
+    <!-- n -->
+    <script src="https://www.gstatic.com/firebasejs/7.1.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.1.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-storage.js"></script>
+</head>
+
+<body>
+    <header>
+        <div>
+            <div class="menu_bar">
+                <a href="#" class="bt-menu"> <span class="ac ac-bars"></span>Menu</a>
+            </div>
+            <nav>
+                <ul>
+                    <div class="pl-2">
+                        <li class="p-2"><a href="./index.html"><span class="ac ac-users"></span>Control de usuarios</a>
+                        </li>
+                    </div>
+                    <div class="pl-2">
+                        <li class="p-2"><a href="./assist.html"><span class="ac ac-clipboard"></span>Control de
+                                ingreso</a>
+                        </li>
+                    </div>
+                    <div class="pl-2">
+                        <li class="p-2"><a href="./failedAcces.html"><span class="ac ac-bullhorn"></span>Alerta de
+                                Accesos</a></li>
+                    </div>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+
+    <div class="row p-5">
+        <div class="col-md-8">
+            <div class="ingresar">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col align-self-start">
+                            <input type="date" id="date" class="form-control font-weight-bold .lead" autocomplete="on"> 
+                        </div>
+                        <div class="col align-self-end">
+                            <button class="btn btn-success" id="GetUsers" onclick="OnlyAccess()">Consultar</button>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Código</th>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Hora de intento</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users">
+                            <!-- Aquí se cargarán los datos -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-1"></div>
+    </div>
+    
+    <script src="./src/public/js/JQuery/jquery-3.4.1.min.js"></script>
+    <script src="./src/public/js/failedEasy.js"></script>
+</body>
+
+</html>

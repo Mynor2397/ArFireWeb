@@ -1,0 +1,48 @@
+.login{
+   border: 1px solid rgb(230, 203, 81);
+   border-radius:  5px;
+   padding: 17px;
+   width: 300px;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   background:transparent;
+   box-shadow: 0px 10px 10px rgb(236, 190, 38);
+}
+
+@media (max-width: 400px){
+    .login{
+        width: 90%;
+    }
+}
+
+.ingresar{
+    box-shadow: 0px 4px 3px rgb(18, 169, 207);
+    background: transparent;
+    color: rgb(179, 170, 170);
+    
+    width: 100%;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+h4, label{
+    border: 2px;
+    color: rgb(179, 170, 170);
+}
+button{
+  background-color: rgb(127, 206, 23);
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 3px;
+}
+
+.pas:hover{
+    background: rgb(176, 219, 107);
+    cursor: pointer;
+}
