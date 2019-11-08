@@ -1,27 +1,14 @@
-var firebaseConfig = {
-    apiKey: "AIzaSyAwAphNUl84U0IXwMlU_2czwv0loOOOR6U",
-    authDomain: "esp8266-b25ef.firebaseapp.com",
-    databaseURL: "https://esp8266-b25ef.firebaseio.com",
-    projectId: "esp8266-b25ef",
-    storageBucket: "esp8266-b25ef.appspot.com",
-    messagingSenderId: "388176712607",
-    appId: "1:388176712607:web:5bbd67bda6f2436eb9a3aa",
-    measurementId: "G-HXC1766RVM"
-};
-//------------------------------------------------------------------------------------------
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-firebase.analytics();
-
-/// Esta variable me permite realizar consultas a mi base de datos
-var db = firebase.database()
-
-
 function GetAssist() {
     var fecha = $('#date').val()
 
     fecha = fecha.split('-')
+
     var dia = fecha[2]
+
+    if (dia.charAt(0) === '0') {
+        dia = dia.slice(1);
+    }
+
     var mes = fecha[1]
     var anio = fecha[0]
 
@@ -30,9 +17,7 @@ function GetAssist() {
 
     var entrada;
     var salida;
-    var clave;
-    var nombre;
-    var apellido;
+
 
     var referencia = 'registro/' + dia + "-" + mes + "-" + anio
     console.log(referencia);
@@ -58,7 +43,7 @@ function GetAssist() {
                         var datauser = db.ref('empleado/' + data.key)
                         datauser.once('value').then(function (data) {
                             users += `
-                            <tr>
+                            <tr  Empleadoid="${data.key}" id="empleado"  namempleado="${data.val().nombre}"class="pas">
                                 <td>${data.key}</td>
                                 <td>${data.val().nombre}</td>
                                 <td>${data.val().apellido}</td>
@@ -89,3 +74,30 @@ function GetAssist() {
     });
 }
 
+
+$(document).on('click', '#empleado', async function () {
+    var storage = firebase.storage().ref("imgs")
+
+    let element = $(this)[0];
+    console.log(element);
+
+    let id = $(element).attr('Empleadoid')
+
+    await storage.child(id + '.jpg').getDownloadURL().then(function (url) {
+        var xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+        xhr.onload = function (event) {
+            var blob = xhr.response;
+        };
+        xhr.open('GET', url);
+        xhr.send();
+
+        var img = document.getElementById('myimg');
+        img.src = url;
+    }).catch(function (error) {
+        console.log(error);
+    });
+
+    let name = $(element).attr('namempleado')
+    $('#infoEmpleado').html(name)
+})

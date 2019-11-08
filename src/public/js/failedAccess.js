@@ -1,139 +1,99 @@
-var firebaseConfig = {
-    apiKey: "AIzaSyAwAphNUl84U0IXwMlU_2czwv0loOOOR6U",
-    authDomain: "esp8266-b25ef.firebaseapp.com",
-    databaseURL: "https://esp8266-b25ef.firebaseio.com",
-    projectId: "esp8266-b25ef",
-    storageBucket: "esp8266-b25ef.appspot.com",
-    messagingSenderId: "388176712607",
-    appId: "1:388176712607:web:5bbd67bda6f2436eb9a3aa",
-    measurementId: "G-HXC1766RVM"
-};
-//------------------------------------------------------------------------------------------
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-firebase.analytics();
 
-/// Esta variable me permite realizar consultas a mi base de datos
-var db = firebase.database()
-
-
-async function GetAllUsers() {
-    var fecha = $('#date').val()
-
-    fecha = fecha.split('-')
-    var dia = fecha[2]
-    var mes = fecha[1]
-    var anio = fecha[0]
-
-    console.log("i");
-    
-    var referencia = anio + "/" + mes + "/" + dia
-    var fechatable = dia + "/" + mes + "/" + anio
-
-
-    var user = db.ref("failedaccess/" + referencia);
-    let users = '';
-
-    await user.on("child_added", data => { // esto me
-
-        users += `
-        <tr>
-            <td>${data.val().codigo}</td>
-            <td>${fechatable}</td>
-            <td>${data.val().horaIntento}</td>
-        </tr>
-        `
-
-        if (data.val().codigo == undefined) {
-            let alert = `
-                <tr>
-                    <td>Ningun intento de acceso encontado</td>
-                </tr>
-                `
-            document.getElementById('users').innerHTML = alert
-            return
-        }
-
-        document.getElementById('users').innerHTML = users
-    })
-}
-getAllFailedUSer();
-
-function getAllFailedUSer() {
+GetAllAccess()
+function GetAllAccess() {
     var failed = db.ref('failedaccess')
+    let faileds;
 
     failed.once('value')
         .then((result) => {
             if (result.exists()) {
-                var keys = Object.keys(result.val())
-                for (var i = 0; i < keys.length; i += 1) {
+                var fechas = Object.keys(result.val())
+                for (var ii = 0; ii < fechas.length; ii += 1) {
+                    var fecha = fechas[ii]
 
-                    var anios = keys[i]
-                    var anio = db.ref('failedaccess/' + anios) ///consulta a los años
-
-                    anio.once('value')
-                        .then(result => {
-                            if (result.exists()) {
-                                var keyst = Object.keys(result.val())
-                                for (var ii = 0; ii < keyst.length; ii += 1) {
-                                    var meses = keyst[ii]
-                                    var mes = db.ref('failedaccess/' + anios + '/' + meses) //consulta a los  mesese
-
-                                    mes.once('value')
-                                        .then(result => {
-                                            if (result.exists()) {
-
-                                                var dias = Object.keys(result.val())
-                                                console.log(result.val());
-                                                console.log("Estos son los dias", Object.keys(result.val()));
-
-                                                for (var d = 0; d < dias.length; d += 1) {
-                                                    var dia = dias[d]
-                                                    var days = db.ref('failedaccess/' + anios + '/' + meses + '/' + dia) //accesso a los dia
-
-                                                    days.on('value', function(snapshot) {
-                                                        console.log(snapshot.val());
-                                                        
-                                                      });
-                                                    days.once('value')
-                                                        .then(result => {
-                                                            if (result.exists()) {
-                                                                var claves = Object.keys(result.val())
-
-                                                                for (var c = 0; c < claves.length; c += 1) {
-                                                                    var clave = claves[c]
-
-                                                                    var days = db.ref('failedaccess/' + anios + '/' + meses + '/' + dia + '/' + clave) //accesso a los dia
-
-                                                                }
-
-
-                                                            } else {
-                                                                console.log('No data dias');
-
-                                                            }
-                                                        })
-                                                }
-
-                                            } else {
-                                                console.log('No data mes');
-
-                                            }
-                                        })
-                                }
-                            } else {
-                                console.log('No data anios');
-
-                            }
-                        })
+                    var elements = db.ref('failedaccess/' + fecha)
+                    elements.on('child_added', result => {
+                        console.log(result.val().codigo);
+                        var fecha = result.ref;
+                        var num = String(fecha).split('/')
+                        faileds += `
+                        <tr>
+                            <td>${result.val().codigo}</td>
+                            <td>${num[4]}</td>
+                            <td>${result.val().horaIntento}</td>
+                        </tr>
+                        `
+                        $('#users').html(faileds)
+                    })
                 }
-
             } else {
                 console.log("no data");
-
             }
-        }).catch((err) => {
-            console.log(err);
-        });
 
+        }).catch((err) => {
+
+        });
+}
+
+function OnlyAccess() {
+    var fecha = $('#date').val()
+
+    fecha = fecha.split('-')
+    var dia = fecha[2]
+
+    if (dia.charAt(0) === '0') {
+        dia = dia.slice(1);
+    }
+
+    var mes = fecha[1]
+    var anio = fecha[0]
+    let users = '';
+
+
+    var ref = dia + "-" + mes + '-' + anio
+
+    console.log(ref);
+
+    var onlyaccess = db.ref('failedaccess/' + ref)
+    onlyaccess.once('value').then(result => {
+
+
+        if (result.exists()) {
+            var keys = Object.keys(result.val())
+
+            for (var ii = 0; ii < keys.length; ii += 1) {
+                var key = keys[ii]
+
+                var alldata = db.ref('failedaccess/' + ref + '/' + key)
+                alldata.once('value').then(result => {
+                    users += `
+                    <tr>
+                        <td>${result.val().codigo}</td>
+                        <td>${ref}</td>
+                        <td>${result.val().horaIntento}</td>
+                    </tr>
+                    `
+                    console.log(users);
+
+                    $('#users').html(users)
+
+                })
+            }
+
+
+
+
+        } else {
+            users = `
+            <tr>
+                <td>Ningun dato encontrado</td>
+            </tr>
+            `
+            $('#users').html(users)
+
+        }
+    }).catch((err) => {
+        console.log(err);
+
+    });
 }

@@ -28,7 +28,7 @@
             <nav>
                 <ul>
                     <div class="pl-2">
-                        <li class="p-2"><a href="./index.html"><span class="ac ac-users"></span>Control de usuarios</a>
+                        <li class="p-2"><a href="./users.html"><span class="ac ac-users"></span>Control de usuarios</a>
                         </li>
                     </div>
                     <div class="pl-2">
@@ -47,12 +47,13 @@
 
 
     <div class="row p-5">
+        <div class="col-md-2"></div>
         <div class="col-md-8">
             <div class="ingresar">
                 <div class="card-header">
                     <div class="row">
                         <div class="col align-self-start">
-                            <input type="date" id="date" class="form-control font-weight-bold .lead" autocomplete="on"> 
+                            <input type="date" id="date" class="form-control font-weight-bold .lead" autocomplete="on">
                         </div>
                         <div class="col align-self-end">
                             <button class="btn btn-success" id="GetUsers" onclick="OnlyAccess()">Consultar</button>
@@ -79,9 +80,10 @@
 
         <div class="col-md-1"></div>
     </div>
-    
+
     <script src="./src/public/js/JQuery/jquery-3.4.1.min.js"></script>
-    <script src="./src/public/js/failedEasy.js"></script>
+    <script src="./src/services/firebase.js"></script>
+    <script src="./src/public/js/failedAccess.js"></script>
 </body>
 
 </html>
